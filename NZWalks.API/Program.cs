@@ -15,7 +15,13 @@ builder.Services.AddDbContext<NZWalksDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalks"));
 });
 
+
 builder.Services.AddScoped<IRegionRepository, RegionRepository>();
+
+// takes an assembly to scan all the profiles
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

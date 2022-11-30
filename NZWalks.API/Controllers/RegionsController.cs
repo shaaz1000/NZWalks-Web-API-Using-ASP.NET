@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.Repositories;
 
 namespace NZWalks.API.Controllers
@@ -8,17 +9,21 @@ namespace NZWalks.API.Controllers
     public class RegionsController : Controller
     {
         private readonly IRegionRepository regionRepository;
+        private readonly IMapper mapper;
 
         // injecting service in constructor
-        public RegionsController(IRegionRepository regionRepository)
+        public RegionsController(IRegionRepository regionRepository, IMapper mapper)
         {
             this.regionRepository = regionRepository;
+            this.mapper = mapper;
         }
         [HttpGet]
-       public IActionResult getAllRegions()
+       public async Task<IActionResult> getAllRegions()
         {
-            var regions = regionRepository.GetAll();
-            return Ok(regions);
+            var regions = await regionRepository.GetAllAsync();
+            // type we want to convert it into 
+            var regionsDto = mapper.Map<List<Models.DTO.Region>>(regions);
+            return Ok(regionsDto);
         }
     }
 }
